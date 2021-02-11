@@ -50,8 +50,8 @@ def processAnnotatedImages(annotatedImagesPath, croppedImagesPath, sizeSquareIma
     totalOfInstar4BoundingBoxesImages = 0
     totalOfAdultaBoundingBoxesImages = 0
     totalOfOvoBoundingBoxesImages = 0
-    # maxHeight = 0
-    # maxWidth = 0
+    totalOfInstar1ou2BoundingBoxesImages = 0
+    totalOfInstar3ou4BoundingBoxesImages = 0
 
     for fileName in os.listdir(annotatedImagesPath):
 
@@ -93,9 +93,6 @@ def processAnnotatedImages(annotatedImagesPath, croppedImagesPath, sizeSquareIma
         # defining id of bounding box
         idBoundingBox = 0
 
-        # removing cropped images and anotations files
-        # removeFilesRelatedToImage()
-
         # processing the file of ground truth data
         counter = 0
         while line != '':
@@ -121,6 +118,11 @@ def processAnnotatedImages(annotatedImagesPath, croppedImagesPath, sizeSquareIma
                                                    linOfCentrePoint, widthOfCentrePoint, heightOfCentrePoint,
                                                    idBoundingBox,
                                                    idClass)
+            # merging classes
+            if (annotatedBoundingBox.className == 'instar1' or annotatedBoundingBox.className == 'instar2'):
+                annotatedBoundingBox.className = 'instar1ou2'
+            if (annotatedBoundingBox.className == 'instar3' or annotatedBoundingBox.className == 'instar4'):
+                annotatedBoundingBox.className = 'instar3ou4'
 
             print(imageName,
                   'bb', idBoundingBox,
@@ -177,6 +179,10 @@ def processAnnotatedImages(annotatedImagesPath, croppedImagesPath, sizeSquareIma
                 totalOfAdultaBoundingBoxesImages += 1
             elif annotatedBoundingBox.className == 'ovo':
                 totalOfOvoBoundingBoxesImages += 1
+            elif annotatedBoundingBox.className == 'instar1ou2':
+                totalOfInstar1ou2BoundingBoxesImages += 1
+            elif annotatedBoundingBox.className == 'instar3ou4':
+                totalOfInstar3ou4BoundingBoxesImages += 1
 
             # -----------------
             # reading next line
@@ -190,15 +196,18 @@ def processAnnotatedImages(annotatedImagesPath, croppedImagesPath, sizeSquareIma
     print('')
     print('Estatísticas do Processamento:')
     print('------------------------------')
-    print('Total de imagens             : ', totalOfImages)
-    print('Total de bounding boxes      : ', totalOfBoundingBoxes)
-    print('Total de imagens de exuvia   : ', totalOfExuviaBoundingBoxesImages)
-    print('Total de imagens de instar1  : ', totalOfInstar1BoundingBoxesImages)
-    print('Total de imagens de instar2  : ', totalOfInstar2BoundingBoxesImages)
-    print('Total de imagens de instar3  : ', totalOfInstar3BoundingBoxesImages)
-    print('Total de imagens de instar4  : ', totalOfInstar4BoundingBoxesImages)
-    print('Total de imagens de adultas  : ', totalOfAdultaBoundingBoxesImages)
-    print('Total de imagens de ovo      : ', totalOfOvoBoundingBoxesImages)
+    print('Total de imagens                 : ', totalOfImages)
+    print('Total de bounding boxes          : ', totalOfBoundingBoxes)
+    print('Total de imagens de exuvia       : ', totalOfExuviaBoundingBoxesImages)
+    print('Total de imagens de instar1      : ', totalOfInstar1BoundingBoxesImages)
+    print('Total de imagens de instar2      : ', totalOfInstar2BoundingBoxesImages)
+    print('Total de imagens de instar3      : ', totalOfInstar3BoundingBoxesImages)
+    print('Total de imagens de instar4      : ', totalOfInstar4BoundingBoxesImages)
+    print('Total de imagens de adultas      : ', totalOfAdultaBoundingBoxesImages)
+    print('Total de imagens de ovo          : ', totalOfOvoBoundingBoxesImages)
+    print('Total de imagens de instar1 ou 2 : ', totalOfInstar1ou2BoundingBoxesImages)
+    print('Total de imagens de instar3 ou 4 : ', totalOfInstar3ou4BoundingBoxesImages)
+
     print('Máximo Height                : ', sizeSquareImage)
     print('Máximo Width                 : ', sizeSquareImage)
     print('')
@@ -621,16 +630,6 @@ def saveCroppedBoundingBoxAnnotationFile(croppedImageWidth, croppedImageHeight,
 
 
 # ###########################################
-# Methods of Level 4
-# ###########################################
-
-
-# ###########################################
-# Methods of Level 5
-# ###########################################
-
-
-# ###########################################
 # Main method
 # ###########################################
 if __name__ == '__main__':
@@ -655,5 +654,5 @@ if __name__ == '__main__':
     processAnnotatedImages(ANNOTATED_BOUNDING_BOXES_DATABASE_PATH, CROPPED_BOUNDING_BOXES_DATABASE_PATH,
                            sizeSquareImage)
 
-    # print('Total of Yolo annotations:', str(counter))
+    # end of processing
     print('End of processing')

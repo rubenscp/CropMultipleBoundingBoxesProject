@@ -110,3 +110,7 @@ class BoundingBox:
             self.className = 'adulta'
         elif idClass == 6:
             self.className = 'ovo'
+        elif idClass == 7:
+            self.className = 'instar1ou2'
+        elif idClass == 8:
+            self.className = 'instar3ou4'
