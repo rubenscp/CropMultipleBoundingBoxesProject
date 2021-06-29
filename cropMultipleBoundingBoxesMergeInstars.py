@@ -53,6 +53,11 @@ def processAnnotatedImages(annotatedImagesPath, croppedImagesPath, sizeSquareIma
     totalOfInstar1ou2BoundingBoxesImages = 0
     totalOfInstar3ou4BoundingBoxesImages = 0
 
+    numberOfInstar1 = 0
+    numberOfInstar2 = 0
+    numberOfInstar3 = 0
+    numberOfInstar4 = 0
+
     for fileName in os.listdir(annotatedImagesPath):
 
         # check if file is an image or not
@@ -118,10 +123,30 @@ def processAnnotatedImages(annotatedImagesPath, croppedImagesPath, sizeSquareIma
                                                    linOfCentrePoint, widthOfCentrePoint, heightOfCentrePoint,
                                                    idBoundingBox,
                                                    idClass)
+
+            # counting number of instars
+            if annotatedBoundingBox.className == 'instar1':
+                numberOfInstar1 += 1
+            if annotatedBoundingBox.className == 'instar2':
+                numberOfInstar2 += 1
+            if annotatedBoundingBox.className == 'instar3':
+                numberOfInstar3 += 1
+            if annotatedBoundingBox.className == 'instar4':
+                numberOfInstar4 += 1
+
             # merging classes
             if (annotatedBoundingBox.className == 'instar1' or annotatedBoundingBox.className == 'instar2'):
+                if numberOfInstar1 > 65 or numberOfInstar2 > 65:
+                    # reading next line
+                    line = imageAnnotationsFile.readline()
+                    continue
                 annotatedBoundingBox.className = 'instar1ou2'
+
             if (annotatedBoundingBox.className == 'instar3' or annotatedBoundingBox.className == 'instar4'):
+                if numberOfInstar3 > 65 or numberOfInstar4 > 65:
+                    # reading next line
+                    line = imageAnnotationsFile.readline()
+                    continue
                 annotatedBoundingBox.className = 'instar3ou4'
 
             print(imageName,
@@ -255,7 +280,7 @@ def cropBoundingBox(annotatedImage, annotatedBoundingBox, sizeSquareImage,
     if (linP1 < 0 or colP1 < 0 or linP2 < 0 or colP2 < 0):
         return False
 
-        # cropping and saving bounding box in new image
+    # cropping and saving bounding box in new image
     croppedBoundingBoxImage = annotatedImage[linP1:linP2, colP1:colP2]
     croppedImageWidth = linP2 - linP1
     croppedImageHeight = colP2 - colP1

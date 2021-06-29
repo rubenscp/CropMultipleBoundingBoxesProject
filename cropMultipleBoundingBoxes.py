@@ -50,8 +50,6 @@ def processAnnotatedImages(annotatedImagesPath, croppedImagesPath, sizeSquareIma
     totalOfInstar4BoundingBoxesImages = 0
     totalOfAdultaBoundingBoxesImages = 0
     totalOfOvoBoundingBoxesImages = 0
-    # maxHeight = 0
-    # maxWidth = 0
 
     for fileName in os.listdir(annotatedImagesPath):
 
